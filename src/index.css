@@ -2,6 +2,8 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   /* outline: 1px solid red; */
 }
 
@@ -9,7 +11,6 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: #202124;
-  margin: 0;
   padding: 2rem;
   font-family: "IBM Plex Sans", sans-serif;
   color: #bdc1c6;
@@ -20,8 +21,76 @@ body {
   height: 100%;
   outline: 1px solid #3c4043;
   display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
   overflow: hidden;
+}
+
+.blog-lists {
+  width: 65%;
+  height: 100%;
+  padding: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.blog {
+  width: 95%;
+  margin: 12px auto;
+  padding: 8px;
+  height: 5rem;
+  box-shadow: 0 -1px 2px #3c4043;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.blog a {
+  text-decoration: none;
+  color: inherit;
+  font-size: 2.75rem;
+  width: 65%;
+  transition: color 0.25s ease;
+}
+
+.blog a:hover {
+  color: seashell;
+}
+
+.blog div {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  padding-right: 5px;
+}
+
+.blog div p {
+  width: max-content;
+}
+
+.blog div p:hover {
+  cursor: pointer;
+}
+
+.blog div button {
+  border: none;
+  background-color: initial;
+  color: inherit;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.blog div button:hover {
+  cursor: pointer;
+}
+
+.form-field {
+  width: 35%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 4px 0px 8px #bdc1c6;
 }
