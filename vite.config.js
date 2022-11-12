@@ -17,5 +17,11 @@ export default defineConfig({
   },
   preview: {
     port: 8080
+  },
+  css: {
+    modules: {
+      localsConvention: "camelCase",
+      generateScopedName: "[local]_[hash:base64:2]"
+    }
   }
 });

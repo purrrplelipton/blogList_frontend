@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Aux from "./COMPS/HOCs/Aux";
+import Aux from "./HOCs/Aux";
 import Input from "./COMPS/INPUT/Input";
 import Footer from "./COMPS/FOOTER/Footer";
 import BlogServices from "./SERVICES/BlogServices";
@@ -14,7 +14,6 @@ function App() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
-  const [likes, setLikes] = useState(0);
   const [errorMessage, setErrorMessage] = useState({
     success: null,
     message: null,
@@ -48,14 +47,14 @@ function App() {
     if (duplicateTitleCheck) {
       setErrorMessage({
         success: false,
-        message: `“${duplicateTitleCheck.title}” already exists`,
+        message: `A blog with title: “${duplicateTitleCheck.title}”, already exists`,
       });
       setTimeout(() => setErrorMessage({ message: null, success: null }), 7000);
       return;
     } else if (duplicateUrlCheck) {
       setErrorMessage({
         success: false,
-        message: "a blog with that URL already exists.",
+        message: "Duplicate URL detected.",
       });
       setTimeout(() => setErrorMessage({ message: null, success: null }), 7000);
       return;
@@ -89,15 +88,39 @@ function App() {
     return setErrorMessage({ success: null, message: null });
   }
 
-  function updateLikes(blog) {
-    console.log(blog);
-    BlogServices.updateBlogDetails(blog.id, {
-      ...blog,
-      likes: (blog.likes += 1),
+  function updateLikes(id) {
+    const blogToUpdate = blogs.find((blog) => blog.id === id);
+
+    BlogServices.updateBlogDetails(id, {
+      ...blogToUpdate,
+      likes: blogToUpdate.likes + 1,
     })
-      .then((dbBlogs) => {
-        setBlogs((prevBlog) =>
-          prevBlog.map((b) => (b.id !== blog.id ? b : dbBlogs.id))
+      .then((dbUpdatedBlog) => {
+        setBlogs((prevBlogs) =>
+          prevBlogs.map((blog) => (blog.id === id ? dbUpdatedBlog : blog))
+        );
+      })
+      .catch((err) => {
+        setErrorMessage({ success: false, message: err.message });
+        setTimeout(
+          () => setErrorMessage({ success: null, message: null }),
+          7000
+        );
+      });
+  }
+
+  function deleteBlog(id) {
+    const blogToDeleteTitle = blogs.find((b) => b.id === id).title;
+    BlogServices.deleteBlog(id)
+      .then(() => {
+        setBlogs((prevBlog) => prevBlog.filter((b) => b.id !== id));
+        setErrorMessage({
+          success: true,
+          message: `successfully deleted “${blogToDeleteTitle}”`,
+        });
+        setTimeout(
+          () => setErrorMessage({ success: null, message: null }),
+          7000
         );
       })
       .catch((err) => {
@@ -112,7 +135,11 @@ function App() {
   return (
     <Aux>
       <Notification slideUp={slideUp} errorMessage={errorMessage} />
-      <All_Blogs updateLikes={updateLikes} blogs={blogs} />
+      <All_Blogs
+        deleteBlog={deleteBlog}
+        updateLikes={updateLikes}
+        blogs={blogs}
+      />
       <section className={"form-field"}>
         <form onSubmit={createBlog}>
           <Logo

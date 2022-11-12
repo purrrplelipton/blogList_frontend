@@ -12,6 +12,7 @@ p.slide-down-message {
   border-top: 1px solid;
   border-bottom: 1px solid;
   transform: translateY(-100%);
+  z-index: 2;
 }
 
 @keyframes slide-down {
